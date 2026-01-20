@@ -1,6 +1,7 @@
 """Phase 1: Data Preparation - Main pipeline."""
 
 import os
+import sys
 import yaml
 from pathlib import Path
 from utils.data_utils import (
@@ -73,14 +74,44 @@ def main():
     print(f"\nData Augmentation Enabled: {config['data']['augmentation']['enabled']}")
     print(f"Train/Val/Test Split: {config['data']['splits']['train']}/{config['data']['splits']['val']}/0.15")
     
-    # Add paths to datasets as needed
-    # breakhis_data = prepare_breakhis_dataset(config, 'data/BreakHis')
-    # cbis_ddsm_data = prepare_cbis_ddsm_dataset(config, 'data/CBIS-DDSM')
+    # Prepare datasets
+    datasets = {}
     
-    print("\n✓ Data preparation pipeline initialized")
-    print("  - DataAugmenter ready")
-    print("  - Dataset loaders ready")
-    print("  - Balanced split strategy configured")
+    # BreakHis dataset
+    breakhis_path = 'data/BreaKHis_v1'
+    if Path(breakhis_path).exists():
+        print(f"\n📂 Loading BreakHis dataset from {breakhis_path}...")
+        breakhis_data = prepare_breakhis_dataset(config, breakhis_path)
+        datasets['BreakHis'] = breakhis_data
+        print(f"✓ BreakHis: {len(breakhis_data['images'])} images loaded")
+    else:
+        print(f"\n⚠️  BreakHis not found at {breakhis_path}")
+        print("   Download with: python download_breakhis.py")
+    
+    # CBIS-DDSM dataset
+    cbis_ddsm_path = 'data/CBIS-DDSM'
+    if Path(cbis_ddsm_path).exists():
+        print(f"\n📂 Loading CBIS-DDSM dataset from {cbis_ddsm_path}...")
+        cbis_ddsm_data = prepare_cbis_ddsm_dataset(config, cbis_ddsm_path)
+        datasets['CBIS-DDSM'] = cbis_ddsm_data
+        print(f"✓ CBIS-DDSM: {len(cbis_ddsm_data['images'])} images loaded")
+    else:
+        print(f"\n⚠️  CBIS-DDSM not found at {cbis_ddsm_path}")
+        print("   Download from: https://www.kaggle.com/datasets/awsaf49/cbis-ddsm-breast-cancer-dataset")
+    
+    # Summary
+    print("\n" + "=" * 60)
+    print("✓ Data Preparation Summary")
+    print("=" * 60)
+    if datasets:
+        for name, data in datasets.items():
+            print(f"\n{name}:")
+            print(f"  Total images: {len(data['images'])}")
+            print(f"  Train: {len(data['splits']['train'])} | Val: {len(data['splits']['val'])} | Test: {len(data['splits']['test'])}")
+    else:
+        print("No datasets found. Please download datasets first:")
+        print("  1. BreakHis: python download_breakhis.py")
+        print("  2. CBIS-DDSM: Download from Kaggle")
 
 
 if __name__ == '__main__':

@@ -6,8 +6,7 @@ import yaml
 from pathlib import Path
 from utils.data_utils import (
     DataAugmenter, 
-    BreakHisLoader, 
-    CBISDDSMLoader,
+    BreakHisLoader,
     create_balanced_splits
 )
 
@@ -22,27 +21,6 @@ def prepare_breakhis_dataset(config: dict, data_path: str):
     """Prepare BreakHis dataset."""
     print("Loading BreakHis dataset...")
     loader = BreakHisLoader(data_path)
-    images, labels = loader.load_dataset()
-    
-    print(f"Total samples: {len(images)}")
-    print(f"Benign: {sum(1 for l in labels if l == 0)}")
-    print(f"Malignant: {sum(1 for l in labels if l == 1)}")
-    
-    # Create balanced splits
-    splits = create_balanced_splits(
-        images, 
-        labels,
-        train_ratio=config['data']['splits']['train'],
-        val_ratio=config['data']['splits']['val']
-    )
-    
-    return {'images': images, 'labels': labels, 'splits': splits}
-
-
-def prepare_cbis_ddsm_dataset(config: dict, data_path: str):
-    """Prepare CBIS-DDSM dataset."""
-    print("Loading CBIS-DDSM dataset...")
-    loader = CBISDDSMLoader(data_path)
     images, labels = loader.load_dataset()
     
     print(f"Total samples: {len(images)}")
@@ -88,17 +66,6 @@ def main():
         print(f"\n⚠️  BreakHis not found at {breakhis_path}")
         print("   Download with: python download_breakhis.py")
     
-    # CBIS-DDSM dataset
-    cbis_ddsm_path = 'data/CBIS-DDSM'
-    if Path(cbis_ddsm_path).exists():
-        print(f"\n📂 Loading CBIS-DDSM dataset from {cbis_ddsm_path}...")
-        cbis_ddsm_data = prepare_cbis_ddsm_dataset(config, cbis_ddsm_path)
-        datasets['CBIS-DDSM'] = cbis_ddsm_data
-        print(f"✓ CBIS-DDSM: {len(cbis_ddsm_data['images'])} images loaded")
-    else:
-        print(f"\n⚠️  CBIS-DDSM not found at {cbis_ddsm_path}")
-        print("   Download from: https://www.kaggle.com/datasets/awsaf49/cbis-ddsm-breast-cancer-dataset")
-    
     # Summary
     print("\n" + "=" * 60)
     print("✓ Data Preparation Summary")
@@ -109,9 +76,8 @@ def main():
             print(f"  Total images: {len(data['images'])}")
             print(f"  Train: {len(data['splits']['train'])} | Val: {len(data['splits']['val'])} | Test: {len(data['splits']['test'])}")
     else:
-        print("No datasets found. Please download datasets first:")
-        print("  1. BreakHis: python download_breakhis.py")
-        print("  2. CBIS-DDSM: Download from Kaggle")
+        print("No datasets found. Please download BreakHis dataset:")
+        print("  python download_breakhis.py")
 
 
 if __name__ == '__main__':

@@ -7,12 +7,6 @@ data:
       url: "https://web.inf.ufpr.br/vri/databases/breast-cancer-histopathological-database/"
       modality: histopathology
       magnifications: [40, 100, 200, 400]
-    - name: CBIS-DDSM
-      url: "https://www.kaggle.com/datasets/awsaf49/cbis-ddsm-breast-cancer-dataset"
-      modality: mammography
-    - name: INbreast
-      url: "https://www.kaggle.com/datasets/raghavchaubey/inbreast"
-      modality: mammography
   
   augmentation:
     enabled: true

@@ -1,5 +1,17 @@
 # 🎯 Kaggle Training Guide - Breast Cancer Identification
 
+## ⚠️ Important: Dataset Setup Required
+
+**The dataset must be available in the repository or as a Kaggle dataset.**
+
+See [KAGGLE_DATASET_SETUP.md](KAGGLE_DATASET_SETUP.md) for detailed setup instructions.
+
+**Quick options:**
+- **Recommended:** Upload dataset to Kaggle Datasets (see setup guide)
+- **Alternative:** Commit dataset to GitHub repo (8GB - not recommended)
+
+---
+
 ## Quick Start (3 Steps)
 
 ### 1️⃣ Open Notebook in Kaggle
@@ -27,7 +39,7 @@
 
 ### 🌐 Internet
 - Toggle **Internet** → **ON**
-- Required for downloading dataset
+- Required for cloning repository (dataset included)
 
 ### 📁 Persistence
 - Toggle **Persistence** → **ON** (optional)
@@ -73,6 +85,11 @@ Good for learning/debugging
 ✓ P100 GPU Detected!
    Estimated training time: 1.5-2 hours
 
+✓ BreakHis dataset found in repository!
+   Benign images: 2,480
+   Malignant images: 5,429
+   Total images: 7,909
+
 Epoch 1/50: Train Loss: 0.4523  Train Acc: 78.5%
             Val Loss: 0.3821    Val Acc: 82.3%
 ...
@@ -103,7 +120,7 @@ Epoch 50/50: Train Loss: 0.0845  Train Acc: 97.2%
 
 ## 💡 Training Modes
 
-### Mode 1: Quick Test (15-20 min)
+### Mode 1: Quick Test (10-15 min)
 ```python
 # In notebook, set:
 TRAINING_MODE = "QUICK"
@@ -168,13 +185,14 @@ config['models']['training']['batch_size'] = 16  # Instead of 32
 2. Click **Save** (top right)
 3. Restart notebook
 
-### Problem: "Dataset download failed"
-**Cause**: Internet not enabled or server timeout
+### Problem: "Dataset not found"
+**Cause**: Repository clone incomplete or dataset missing
 
 **Solution**:
-1. Settings → Internet → **ON**
-2. Re-run download cell
-3. If still fails, wait 5 minutes and retry
+1. Verify Internet is enabled (Settings → Internet → ON)
+2. Re-run repository clone cell
+3. Check that `data/BreaKHis_v1/` directory exists in repository
+4. If dataset still missing, ensure it's committed to your GitHub repo
 
 ### Problem: "Permission denied" errors
 **Cause**: Kaggle filesystem restrictions
@@ -334,7 +352,7 @@ Kaggle Free Tier:
 | Training Time | 1.5-2.5 hours | 2-3 hours |
 | Storage | 73 GB | 15 GB |
 | Setup | Clone repo | Mount Drive |
-| Dataset | Direct download | Manual setup |
+| Dataset | Included in repo | Included in repo |
 | **Recommendation** | ✅ **Primary** | Backup |
 
 **Use Kaggle for:**

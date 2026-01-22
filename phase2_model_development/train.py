@@ -1,5 +1,13 @@
 """Phase 2: Lightweight Model Development - Training pipeline."""
 
+import os
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+
 import torch
 import torch.nn as nn
 import torch.optim as optim

@@ -31,11 +31,11 @@ data/BreaKHis_v1/
 *.zip
 *.tar.gz
 
-# Models and checkpoints
-*.pt
-*.pth
-checkpoints/
-models/saved/
+# Models and checkpoints (KEEP FOR DEPLOYMENT)
+# *.pt
+# *.pth
+# checkpoints/
+# models/saved/
 
 # Jupyter Notebook
 .ipynb_checkpoints

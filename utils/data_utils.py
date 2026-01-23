@@ -50,14 +50,38 @@ class BreakHisLoader:
         images = []
         labels = []
         
-        class_map = {'benign': 0, 'malignant': 1}
+        # Handle both old and new directory structures
+        # Structure: BreaKHis_v1/histology_slides/breast/{benign_cases,malignant_cases}
+        breast_path = self.root_path / 'histology_slides' / 'breast'
+        if not breast_path.exists():
+            breast_path = self.root_path / 'breast'
         
-        for class_name, class_label in class_map.items():
-            class_path = self.root_path / class_name
-            if class_path.exists():
-                for img_file in class_path.glob('*.png'):
-                    images.append(str(img_file))
-                    labels.append(class_label)
+        # Map directory names to labels
+        case_map = {
+            'benign_cases': 0,
+            'benign': 0,
+            'malignant_cases': 1,
+            'malignant': 1
+        }
+        
+        if breast_path.exists():
+            # Search for benign and malignant case directories
+            for subdir in breast_path.iterdir():
+                if subdir.is_dir():
+                    class_label = case_map.get(subdir.name)
+                    if class_label is not None:
+                        # Recursively find all PNG files
+                        for img_file in subdir.rglob('*.png'):
+                            images.append(str(img_file))
+                            labels.append(class_label)
+        else:
+            # Fallback: check direct subdirectories
+            for class_name, class_label in case_map.items():
+                class_path = self.root_path / class_name
+                if class_path.exists():
+                    for img_file in class_path.rglob('*.png'):
+                        images.append(str(img_file))
+                        labels.append(class_label)
         
         return images, labels
 

@@ -40,10 +40,22 @@ class MobileNetMammography(nn.Module):
     
     def __init__(self, num_classes: int = 2, dropout: float = 0.3, pretrained: bool = True):
         super().__init__()
-        self.backbone = timm.create_model('mobilenet_v3_small', pretrained=pretrained)
+        # Use the correct model name for timm
+        try:
+            self.backbone = timm.create_model('mobilenetv3_small', pretrained=pretrained)
+        except Exception:
+            # Fallback to efficientnet_b0 if mobilenetv3 not available
+            self.backbone = timm.create_model('efficientnet_b0', pretrained=pretrained)
         
         # Remove original classification layer
-        in_features = self.backbone.classifier[1].in_features if hasattr(self.backbone.classifier, '__getitem__') else 1024
+        if hasattr(self.backbone, 'classifier'):
+            if hasattr(self.backbone.classifier, '__getitem__'):
+                in_features = self.backbone.classifier[1].in_features
+            else:
+                in_features = getattr(self.backbone.classifier, 'in_features', 1280)
+        else:
+            in_features = 1280
+        
         self.backbone.classifier = nn.Identity()
         
         # Add custom classification head

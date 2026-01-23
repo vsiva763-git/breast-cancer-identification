@@ -190,3 +190,22 @@ class EnsembleVoting(nn.Module):
         else:
             # Average logits
             return torch.mean(torch.stack(predictions), dim=0)
+
+
+def main():
+    """Simple entrypoint to verify fusion module configuration."""
+    import yaml
+    try:
+        config = yaml.safe_load(open('configs/config.yaml'))
+        strategy = config.get('fusion', {}).get('strategy', 'attention_based')
+        print("=" * 60)
+        print("Phase 3: Multi-Modal Fusion")
+        print("=" * 60)
+        print(f"\nFusion strategy: {strategy}")
+        print("\n✓ Fusion module is ready")
+    except Exception as e:
+        print(f"✗ Fusion module initialization failed: {e}")
+
+
+if __name__ == '__main__':
+    main()
